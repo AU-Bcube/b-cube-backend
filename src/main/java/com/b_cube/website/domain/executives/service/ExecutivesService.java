@@ -43,7 +43,7 @@ public class ExecutivesService {
 
     public BaseResponse addExecutives(String name, String role, String department, String studentId, MultipartFile imagePath) {
         // S3에 파일 업로드
-        String imageUrl = uploadImage(imagePath, bucketName);
+        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
 
         // DB에 저장
         Executives executives = Executives.builder()
@@ -66,7 +66,7 @@ public class ExecutivesService {
                 .orElseThrow(() -> new ExecutivesNotFoundException("해당 회장단은 존재하지 않습니다."));
 
         // S3에 파일 업로드
-        String imageUrl = uploadImage(imagePath, bucketName);
+        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
 
         // 업데이트 할 회장단 새로 구성
         Executives updateExecutive = Executives.builder()
@@ -83,14 +83,6 @@ public class ExecutivesService {
 
         // DTO로 반환
         return convertToExecutivesDTO(updateExecutive);
-    }
-
-    private String uploadImage(MultipartFile imageFile, String bucketName) {
-        try {
-            return s3Uploader.upload(imageFile, bucketName);
-        } catch (IOException e) {
-            throw new RuntimeException("이미지 업로드 실패", e);
-        }
     }
 
     private ExecutivesDTO convertToExecutivesDTO(Executives executives) {

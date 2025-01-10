@@ -1,7 +1,6 @@
 package com.b_cube.website.global.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -90,5 +89,13 @@ public class S3Uploader {
         deleteFile(oldFileName);
         // 새 파일 업로드
         return upload(newFile, dirName);
+    }
+
+    public String uploadImage(MultipartFile imageFile, String bucketName) {
+        try {
+            return upload(imageFile, bucketName);
+        } catch (IOException e) {
+            throw new RuntimeException("이미지 업로드 실패", e);
+        }
     }
 }

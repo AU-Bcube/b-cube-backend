@@ -51,8 +51,8 @@ public class ActivitiesService {
             MultipartFile pdfPath
     ) {
         // S3에 파일 업로드
-        String imageUrl = uploadImage(imagePath, bucketName);
-        String pdfUrl = uploadImage(pdfPath, bucketName);
+        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
+        String pdfUrl = s3Uploader.uploadImage(pdfPath, bucketName);
 
         // DB에 저장
         Activities activities = Activities.builder()
@@ -73,13 +73,5 @@ public class ActivitiesService {
         return BaseResponse.builder()
                 .message(SUCCESS_ACTIVITY_DELETE)
                 .build();
-    }
-
-    private String uploadImage(MultipartFile imageFile, String bucketName) {
-        try {
-            return s3Uploader.upload(imageFile, bucketName);
-        } catch (IOException e) {
-            throw new RuntimeException("이미지 업로드 실패", e);
-        }
     }
 }
