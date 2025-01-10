@@ -91,7 +91,6 @@ public class SexyItService {
         return BaseResponse.builder()
                 .message(SUCCESS_SEXYIT_DELETE)
                 .build();
-
     }
 
     private SexyItDTO convertToSexyItDTO(SexyIt sexyIt) {

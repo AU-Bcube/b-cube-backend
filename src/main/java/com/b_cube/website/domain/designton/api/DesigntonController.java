@@ -54,6 +54,4 @@ public class DesigntonController {
         BaseResponse baseResponse = designtonService.deleteDesignton(id);
         return ResponseEntity.ok(baseResponse);
     }
-
-
 }

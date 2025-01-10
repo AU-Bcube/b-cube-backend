@@ -23,7 +23,7 @@ public class DesigntonService {
     private final DesigntonRepository designtonRepository;
     private final S3Uploader s3Uploader;
     private final String SUCCESS_DESIGNTON_UPLOAD = "디자인톤 업로드가 완료되었습니다.";
-    private final String SUCCESS_ACTIVITY_DELETE = "디자인톤 삭제가 완료되었습니다.";
+    private final String SUCCESS_DESIGNTON_DELETE = "디자인톤 삭제가 완료되었습니다.";
 
 
     public List<DesigntonDTO> getDesignton() {
@@ -71,7 +71,7 @@ public class DesigntonService {
         String pdfUrl = s3Uploader.uploadImage(pdfPath, bucketName);
 
         // 업데이트 할 디자인톤 새로 구성
-        Designton updateDesignton = designton.builder()
+        Designton updateDesignton = Designton.builder()
                 .id(designton.getId())
                 .projectName(projectName)
                 .year(year)
@@ -83,14 +83,14 @@ public class DesigntonService {
         // DB에 저장
         designtonRepository.save(updateDesignton);
 
-        // DTO로 반환
+        // DTO 반환
         return convertToDesigntonDTO(updateDesignton);
     }
 
     public BaseResponse deleteDesignton(Long id) {
         designtonRepository.deleteById(id);
         return BaseResponse.builder()
-                .message(SUCCESS_ACTIVITY_DELETE)
+                .message(SUCCESS_DESIGNTON_DELETE)
                 .build();
     }
 
@@ -104,6 +104,4 @@ public class DesigntonService {
                 .pdfPath(designton.getPdfPath())
                 .build();
     }
-
-
 }
