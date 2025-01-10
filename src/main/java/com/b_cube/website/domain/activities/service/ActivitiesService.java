@@ -31,7 +31,6 @@ public class ActivitiesService {
     public List<ActivitiesDTO> getActivities() {
         // 활동 리스트 가져옴
         List<Activities> activities = activitiesRepository.findAll();
-        System.out.println(activities);
 
         // DTO로 변환
         return activities.stream()
@@ -83,6 +82,4 @@ public class ActivitiesService {
             throw new RuntimeException("이미지 업로드 실패", e);
         }
     }
-
-
 }
