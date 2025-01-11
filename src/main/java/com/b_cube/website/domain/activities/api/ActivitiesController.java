@@ -20,6 +20,7 @@ public class ActivitiesController {
     @GetMapping
     public ResponseEntity<List<ActivitiesDTO>> getActivities() {
         List<ActivitiesDTO> activities = activitiesService.getActivities();
+        // 주석주석
         return ResponseEntity.ok(activities);
     }
 
