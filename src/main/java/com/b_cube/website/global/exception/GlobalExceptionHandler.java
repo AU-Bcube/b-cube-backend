@@ -1,5 +1,7 @@
 package com.b_cube.website.global.exception;
 
+import com.b_cube.website.domain.contact.exception.ContactAlreadyExistsException;
+import com.b_cube.website.domain.contact.exception.ContactNotFoundException;
 import com.b_cube.website.domain.designton.exception.DesigntonNotFoundException;
 import com.b_cube.website.domain.etc.exception.EtcNotFoundException;
 import com.b_cube.website.domain.executives.exception.ExecutivesNotFoundException;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-        @ExceptionHandler({ExecutivesNotFoundException.class, DesigntonNotFoundException.class, SexyItNotFoundException.class, EtcNotFoundException.class})
+        @ExceptionHandler({ExecutivesNotFoundException.class, DesigntonNotFoundException.class, SexyItNotFoundException.class, EtcNotFoundException.class, ContactNotFoundException.class, ContactAlreadyExistsException.class})
         public ResponseEntity<ErrorResponse> handleExecutivesNotFoundException(RuntimeException e) {
             return new ResponseEntity<>(ErrorResponse.builder()
                     .message(e.getMessage())
