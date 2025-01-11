@@ -1,0 +1,65 @@
+package com.b_cube.website.domain.photo.service;
+
+import com.b_cube.website.domain.photo.dto.PhotoDTO;
+import com.b_cube.website.domain.photo.entity.Photo;
+import com.b_cube.website.domain.photo.repository.PhotoRepository;
+import com.b_cube.website.global.dto.BaseResponse;
+import com.b_cube.website.global.service.S3Uploader;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class PhotoService {
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucketName;
+    private final PhotoRepository photoRepository;
+    private final S3Uploader s3Uploader;
+    private final String SUCCESS_PHOTO_UPLOAD = "활동 사진 업로드가 완료되었습니다.";
+    private final String SUCCESS_PHOTO_DELETE = "활동 사진 삭제가 완료되었습니다.";
+
+    public List<PhotoDTO> getPhoto() {
+        List<Photo> photos = photoRepository.findAll();
+
+        return photos.stream()
+                .map(photo -> PhotoDTO.builder()
+                        .id(photo.getId())
+                        .description(photo.getDescription())
+                        .imagePath(photo.getImagePath())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
+    public BaseResponse addPhoto(String description, MultipartFile imagePath) {
+        // S3에 파일 업로드
+        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
+
+        // DB에 저장
+        Photo photo = Photo.builder()
+                .description(description)
+                .imagePath(imageUrl)
+                .build();
+        photoRepository.save(photo);
+
+        return BaseResponse.builder()
+                .message(SUCCESS_PHOTO_UPLOAD)
+                .build();
+    }
+
+
+    public BaseResponse deletePhoto(Long id) {
+
+        photoRepository.deleteById(id);
+        return BaseResponse.builder()
+                .message(SUCCESS_PHOTO_DELETE)
+                .build();
+
+    }
+}
