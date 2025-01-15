@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,7 @@ public class StudyService {
         return studies.stream()
                 .map(study -> StudyDTO.builder()
                         .id(study.getId())
-                        .date(study.getDate())
+                        .year(study.getYear())
                         .title(study.getTitle())
                         .imagePath(study.getImagePath())
                         .build())
@@ -39,13 +38,13 @@ public class StudyService {
 
     }
 
-    public BaseResponse addStudy(LocalDate date, String title, MultipartFile imagePath) {
+    public BaseResponse addStudy(String year, String title, MultipartFile imagePath) {
         // S3에 파일 업로드
         String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
 
         // DB에 저장
         Study study = Study.builder()
-                .date(date)
+                .year(year)
                 .title(title)
                 .imagePath(imageUrl)
                 .build();

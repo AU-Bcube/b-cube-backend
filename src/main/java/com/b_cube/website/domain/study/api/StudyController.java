@@ -5,7 +5,6 @@ import com.b_cube.website.domain.study.service.StudyService;
 import com.b_cube.website.global.dto.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,22 +30,22 @@ public class StudyController {
     }
 
     @Operation(summary = "스터디 목록 추가", description = "form-data 형식으로 진행해야 함")
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<BaseResponse> addStudy(
-            @Parameter(description = "날짜 형식(ex. 2025-01-10)")
-            @RequestParam("date") LocalDate date,
+            @Parameter(description = "연도(문자열)")
+            @RequestParam("year") String year,
             @Parameter(description = "스터디 제목(문자열)")
             @RequestParam("title") String title,
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath
 
     ) {
-        BaseResponse baseResponse = studyService.addStudy(date, title, imagePath);
+        BaseResponse baseResponse = studyService.addStudy(year, title, imagePath);
         return ResponseEntity.ok(baseResponse);
     }
 
     @Operation(summary = "스터디 목록 삭제")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> deleteStudy(
             @Parameter(description = "스터디 id 값")
             @PathVariable Long id

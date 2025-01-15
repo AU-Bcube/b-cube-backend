@@ -29,7 +29,7 @@ public class InterviewController {
     }
 
     @Operation(summary = "인터뷰 목록 추가", description = "form-data 형식으로 진행해야 함")
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<BaseResponse> addInterview(
             @Parameter(description = "인터뷰 성함(문자열)")
             @RequestParam("name") String name,
@@ -38,17 +38,15 @@ public class InterviewController {
             @Parameter(description = "인터뷰 소개 글(문자열)")
             @RequestParam("introduction") String introduction,
             @Parameter(description = "MultipartFile 이미지 삽입")
-            @RequestParam("imagePath") MultipartFile imagePath,
-            @Parameter(description = "인터뷰 이메일(문자열)")
-            @RequestParam("email")  String  email
+            @RequestParam("imagePath") MultipartFile imagePath
 
     ) {
-        BaseResponse baseResponse = interviewService.addInterview(name, studentId, introduction, imagePath, email);
+        BaseResponse baseResponse = interviewService.addInterview(name, studentId, introduction, imagePath);
         return ResponseEntity.ok(baseResponse);
     }
 
     @Operation(summary = "인터뷰 목록 삭제")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> deleteInterview(
             @Parameter(description = "인터뷰 id 값")
             @PathVariable Long id

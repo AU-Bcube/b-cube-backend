@@ -29,7 +29,7 @@ public class ExecutivesController {
     }
 
     @Operation(summary = "회장단 목록 추가", description = "form-data 형식으로 진행해야 함")
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<BaseResponse> addExecutives(
             @Parameter(description = "회장단 이름(문자열)")
             @RequestParam("name") String name,
@@ -47,7 +47,7 @@ public class ExecutivesController {
     }
 
     @Operation(summary = "회장단 목록 수정", description = "form-data 형식으로 진행해야 함")
-    @PatchMapping("/update/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<ExecutivesDTO> updateExecutives(
             @PathVariable Long id,
             @Parameter(description = "회장단 이름(문자열)")

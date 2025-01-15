@@ -32,7 +32,7 @@ public class DesigntonService {
         return designtons.stream()
                 .map(designton -> DesigntonDTO.builder()
                         .id(designton.getId())
-                        .projectName(designton.getProjectName())
+                        .title(designton.getTitle())
                         .year(designton.getYear())
                         .participant(designton.getParticipant())
                         .imagePath(designton.getImagePath())
@@ -41,14 +41,14 @@ public class DesigntonService {
                 .collect(Collectors.toList());
     }
 
-    public BaseResponse addDesignton(String projectName, String year, String participant, MultipartFile imagePath, MultipartFile pdfPath) {
+    public BaseResponse addDesignton(String title, String year, String participant, MultipartFile imagePath, MultipartFile pdfPath) {
         // S3에 파일 업로드
         String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
         String pdfUrl = s3Uploader.uploadImage(pdfPath, bucketName);
 
         // DB에 저장
         Designton designton = Designton.builder()
-                .projectName(projectName)
+                .title(title)
                 .year(year)
                 .participant(participant)
                 .imagePath(imageUrl)
@@ -61,7 +61,7 @@ public class DesigntonService {
                 .build();
     }
 
-    public DesigntonDTO updateDesignton(Long id, String projectName, String year, String participant, MultipartFile imagePath, MultipartFile pdfPath) {
+    public DesigntonDTO updateDesignton(Long id, String title, String year, String participant, MultipartFile imagePath, MultipartFile pdfPath) {
         // 해당 디자인톤 가져옴
         Designton designton = designtonRepository.findById(id)
                 .orElseThrow(() -> new DesigntonNotFoundException("해당 디자인톤은 존재하지 않습니다."));
@@ -73,7 +73,7 @@ public class DesigntonService {
         // 업데이트 할 디자인톤 새로 구성
         Designton updateDesignton = Designton.builder()
                 .id(designton.getId())
-                .projectName(projectName)
+                .title(title)
                 .year(year)
                 .participant(participant)
                 .imagePath(imageUrl)
@@ -97,7 +97,7 @@ public class DesigntonService {
     private DesigntonDTO convertToDesigntonDTO(Designton designton) {
         return DesigntonDTO.builder()
                 .id(designton.getId())
-                .projectName(designton.getProjectName())
+                .title(designton.getTitle())
                 .year(designton.getYear())
                 .participant(designton.getParticipant())
                 .imagePath(designton.getImagePath())

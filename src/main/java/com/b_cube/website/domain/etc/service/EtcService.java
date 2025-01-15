@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,8 +31,9 @@ public class EtcService {
         return etcs.stream()
                 .map(etc -> EtcDTO.builder()
                         .id(etc.getId())
-                        .date(etc.getDate())
+                        .year(etc.getYear())
                         .title(etc.getTitle())
+                        .participant(etc.getParticipant())
                         .imagePath(etc.getImagePath())
                         .pdfPath(etc.getPdfPath())
                         .build())
@@ -42,15 +41,16 @@ public class EtcService {
 
     }
 
-    public BaseResponse addEtc(LocalDate date, String title, MultipartFile imagePath, MultipartFile pdfPath) {
+    public BaseResponse addEtc(String year, String title, String participant , MultipartFile imagePath, MultipartFile pdfPath) {
         // S3에 파일 업로드
         String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
         String pdfUrl = s3Uploader.uploadImage(pdfPath, bucketName);
 
         // DB에 저장
         Etc etc = Etc.builder()
-                .date(date)
+                .year(year)
                 .title(title)
+                .participant(participant)
                 .imagePath(imageUrl)
                 .pdfPath(pdfUrl)
                 .build();
@@ -61,7 +61,7 @@ public class EtcService {
                 .build();
     }
 
-    public EtcDTO updateEtc(Long id, LocalDate date, String title, MultipartFile imagePath, MultipartFile pdfPath) {
+    public EtcDTO updateEtc(Long id, String year, String title, String participant, MultipartFile imagePath, MultipartFile pdfPath) {
         // 해당 기타활동 가져옴
         Etc etc = etcRepository.findById(id)
                 .orElseThrow(() -> new DesigntonNotFoundException("해당 기타활동은 존재하지 않습니다."));
@@ -73,8 +73,9 @@ public class EtcService {
         // 업데이트 할 기타활동 새로 구성
         Etc updateEtc = Etc.builder()
                 .id(etc.getId())
-                .date(date)
+                .year(year)
                 .title(title)
+                .participant(participant)
                 .imagePath(imageUrl)
                 .pdfPath(pdfUrl)
                 .build();
@@ -89,8 +90,9 @@ public class EtcService {
     private EtcDTO convertToEtcDTO(Etc etc) {
         return EtcDTO.builder()
                 .id(etc.getId())
-                .date(etc.getDate())
+                .year(etc.getYear())
                 .title(etc.getTitle())
+                .participant(etc.getParticipant())
                 .imagePath(etc.getImagePath())
                 .pdfPath(etc.getPdfPath())
                 .build();

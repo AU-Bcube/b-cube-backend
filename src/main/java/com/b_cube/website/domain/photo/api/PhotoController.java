@@ -29,7 +29,7 @@ public class PhotoController {
     }
 
     @Operation(summary = "활동 사진 목록 추가", description = "form-data 형식으로 진행해야 함")
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<BaseResponse> addPhoto(
             @Parameter(description = "활동 사진 설명(문자열)")
             @RequestParam("description") String description,
@@ -42,7 +42,7 @@ public class PhotoController {
     }
 
     @Operation(summary = "활동 사진 목록 삭제")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> deletePhoto(
             @Parameter(description = "활동 사진 id 값")
             @PathVariable Long id

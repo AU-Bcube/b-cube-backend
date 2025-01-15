@@ -19,8 +19,8 @@ public class Designton {
     @Column(name = "designton_id")
     private Long id;
 
-    @Column(name = "project_name")
-    private String projectName;
+    @Column(name = "title")
+    private String title;
 
     @Column(name = "year")
     private String year;

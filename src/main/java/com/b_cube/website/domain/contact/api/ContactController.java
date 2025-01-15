@@ -26,7 +26,7 @@ public class ContactController {
     }
 
     @Operation(summary = "연락 목록 추가", description = "form-data 형식으로 진행해야 함")
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<BaseResponse> addContact(
             @Parameter(description = "이메일(문자열)")
             @RequestParam("email") String email,
@@ -40,7 +40,7 @@ public class ContactController {
     }
 
     @Operation(summary = "연락 목록 수정", description = "form-data 형식으로 진행해야 함")
-    @PatchMapping("/update")
+    @PatchMapping
     public ResponseEntity<ContactDTO> updateContact(
             @Parameter(description = "이메일(문자열)")
             @RequestParam("email") String email,

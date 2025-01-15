@@ -31,6 +31,4 @@ public class Interview {
     @Column(name = "image_path")
     private String imagePath;
 
-    @Column(name = "email")
-    private String email;
 }

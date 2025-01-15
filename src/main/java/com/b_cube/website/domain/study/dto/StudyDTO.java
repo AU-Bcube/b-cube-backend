@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class StudyDTO {
 
     private Long id;
-    private LocalDate date;
+    private String year;
     private String title;
     private String imagePath;
 

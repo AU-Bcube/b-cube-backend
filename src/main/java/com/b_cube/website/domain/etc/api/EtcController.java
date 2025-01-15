@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "EtcController", description = "기타활동 컨트롤러")
@@ -30,41 +28,45 @@ public class EtcController {
     }
 
     @Operation(summary = "기타활동 목록 추가", description = "form-data 형식으로 진행해야 함")
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<BaseResponse> addEtc(
-            @Parameter(description = "날짜 형식(ex. 2025-01-10)")
-            @RequestParam("date") LocalDate date,
+            @Parameter(description = "연도(문자열)")
+            @RequestParam("year") String year,
             @Parameter(description = "활동 제목(문자열)")
             @RequestParam("title") String title,
+            @Parameter(description = "프로젝트 참여자 이름(문자열)")
+            @RequestParam("participant") String participant,
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath,
             @Parameter(description = "MultipartFile pdf 삽입")
             @RequestParam("pdfPath")  MultipartFile pdfPath
 
     ) {
-        BaseResponse baseResponse = etcService.addEtc(date, title, imagePath, pdfPath);
+        BaseResponse baseResponse = etcService.addEtc(year, title, participant, imagePath, pdfPath);
         return ResponseEntity.ok(baseResponse);
     }
 
     @Operation(summary = "기타활동 목록 수정", description = "form-data 형식으로 진행해야 함")
-    @PatchMapping("/update/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<EtcDTO> updateEtc(
             @PathVariable Long id,
-            @Parameter(description = "날짜 형식(ex. 2025-01-10)")
-            @RequestParam("date") LocalDate date,
+            @Parameter(description = "연도(문자열)")
+            @RequestParam("year") String year,
             @Parameter(description = "활동 제목(문자열)")
             @RequestParam("title") String title,
+            @Parameter(description = "프로젝트 참여자 이름(문자열)")
+            @RequestParam("participant") String participant,
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath,
             @Parameter(description = "MultipartFile pdf 삽입")
             @RequestParam("pdfPath")  MultipartFile pdfPath
     ) {
-        EtcDTO etc = etcService.updateEtc(id, date, title, imagePath, pdfPath);
+        EtcDTO etc = etcService.updateEtc(id, year, title, participant, imagePath, pdfPath);
         return ResponseEntity.ok(etc);
     }
 
     @Operation(summary = "기타활동 목록 삭제")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> deleteEtc(
             @Parameter(description = "기타활동 id 값")
             @PathVariable Long id

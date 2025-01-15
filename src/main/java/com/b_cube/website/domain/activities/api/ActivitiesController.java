@@ -30,7 +30,7 @@ public class ActivitiesController {
     }
 
     @Operation(summary = "주요활동 목록 추가", description = "form-data 형식으로 진행해야 함")
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<BaseResponse> addActivities(
             @Parameter(description = "주요활동 제목(문자열)")
             @RequestParam("title") String title,
@@ -46,7 +46,7 @@ public class ActivitiesController {
     }
 
     @Operation(summary = "주요활동 목록 삭제")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> deleteActivities(
             @Parameter(description = "주요활동 id 값")
             @PathVariable Long id

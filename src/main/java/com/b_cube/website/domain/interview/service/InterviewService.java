@@ -34,12 +34,11 @@ public class InterviewService {
                         .studentId(interview.getStudentId())
                         .introduction(interview.getIntroduction())
                         .imagePath(interview.getImagePath())
-                        .email(interview.getEmail())
                         .build())
                 .collect(Collectors.toList());
     }
 
-    public BaseResponse addInterview(String name, String studentId, String introduction, MultipartFile imagePath, String email) {
+    public BaseResponse addInterview(String name, String studentId, String introduction, MultipartFile imagePath) {
         // S3에 파일 업로드
         String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
 
@@ -49,7 +48,6 @@ public class InterviewService {
                 .studentId(studentId)
                 .introduction(introduction)
                 .imagePath(imageUrl)
-                .email(email)
                 .build();
         interviewRepository.save(interview);
 

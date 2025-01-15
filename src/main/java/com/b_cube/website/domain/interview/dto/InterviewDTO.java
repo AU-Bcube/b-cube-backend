@@ -16,7 +16,6 @@ public class InterviewDTO {
     private String studentId;
     private String introduction;
     private String imagePath;
-    private String email;
 
 }
 

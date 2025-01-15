@@ -30,7 +30,7 @@ public class SexyItController {
     }
 
     @Operation(summary = "섹시한 IT 목록 추가", description = "form-data 형식으로 진행해야 함")
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<BaseResponse> addSexyIt(
             @Parameter(description = "날짜 형식(ex. 2025-01-10)")
             @RequestParam("date")LocalDate date,
@@ -47,7 +47,7 @@ public class SexyItController {
     }
 
     @Operation(summary = "섹시한 IT 목록 수정", description = "form-data 형식으로 진행해야 함")
-    @PatchMapping("/update/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<SexyItDTO> updateSexyIt(
             @PathVariable Long id,
             @Parameter(description = "날짜 형식(ex. 2025-01-10)")
@@ -64,7 +64,7 @@ public class SexyItController {
     }
 
     @Operation(summary = "섹시한 IT 목록 삭제")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> deleteSexyIt(
             @Parameter(description = "섹시한 IT id 값")
             @PathVariable Long id

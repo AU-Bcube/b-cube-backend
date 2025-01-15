@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Entity
 @Getter
 @Builder
@@ -21,11 +19,14 @@ public class Etc {
     @Column(name = "etc_id")
     private Long id;
 
-    @Column(name = "date")
-    private LocalDate date;
+    @Column(name = "year")
+    private String year;
 
     @Column(name = "title")
     private String title;
+
+    @Column(name = "participant")
+    private String participant;
 
     @Column(name = "image_path")
     private String imagePath;

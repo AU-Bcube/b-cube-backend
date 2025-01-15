@@ -22,7 +22,7 @@ public class Study {
     private Long id;
 
     @Column(name = "date")
-    private LocalDate date;
+    private String year;
 
     @Column(name = "title")
     private String title;

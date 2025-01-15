@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class DesigntonDTO {
 
     private Long id;
-    private String projectName;
+    private String title;
     private String year;
     private String participant;
     private String imagePath;
