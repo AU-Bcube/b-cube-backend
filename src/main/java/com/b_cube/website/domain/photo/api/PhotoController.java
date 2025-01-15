@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "PhotoController", description = "활동 사진 컨트롤러")
@@ -33,11 +34,13 @@ public class PhotoController {
     public ResponseEntity<BaseResponse> addPhoto(
             @Parameter(description = "활동 사진 설명(문자열)")
             @RequestParam("description") String description,
+            @Parameter(description = "연도-월-일(문자열)")
+            @RequestParam(value = "date", required = false) LocalDate date,
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath
 
     ) {
-        BaseResponse baseResponse = photoService.addPhoto(description, imagePath);
+        BaseResponse baseResponse = photoService.addPhoto(description, date, imagePath);
         return ResponseEntity.ok(baseResponse);
     }
 

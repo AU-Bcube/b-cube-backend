@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Builder
@@ -21,6 +23,9 @@ public class Photo {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "date")
+    private LocalDate date;
 
     @Column(name = "image_path")
     private String imagePath;

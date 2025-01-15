@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,22 +32,34 @@ public class PhotoService {
                 .map(photo -> PhotoDTO.builder()
                         .id(photo.getId())
                         .description(photo.getDescription())
+                        .date(photo.getDate())
                         .imagePath(photo.getImagePath())
                         .build())
                 .collect(Collectors.toList());
     }
 
 
-    public BaseResponse addPhoto(String description, MultipartFile imagePath) {
+    public BaseResponse addPhoto(String description, LocalDate date, MultipartFile imagePath) {
         // S3에 파일 업로드
         String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
 
-        // DB에 저장
-        Photo photo = Photo.builder()
-                .description(description)
-                .imagePath(imageUrl)
-                .build();
-        photoRepository.save(photo);
+        if (date == null) {
+            // DB에 저장
+            Photo photo = Photo.builder()
+                    .description(description)
+                    .date(LocalDate.now())
+                    .imagePath(imageUrl)
+                    .build();
+            photoRepository.save(photo);
+        } else {
+            // DB에 저장
+            Photo photo = Photo.builder()
+                    .description(description)
+                    .date(date)
+                    .imagePath(imageUrl)
+                    .build();
+            photoRepository.save(photo);
+        }
 
         return BaseResponse.builder()
                 .message(SUCCESS_PHOTO_UPLOAD)
