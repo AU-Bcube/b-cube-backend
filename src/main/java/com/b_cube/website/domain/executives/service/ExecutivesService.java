@@ -35,19 +35,21 @@ public class ExecutivesService {
                         .id(executive.getId())
                         .role(executive.getRole())
                         .department(executive.getDepartment())
+                        .year(executive.getYear())
                         .studentId(executive.getStudentId())
                         .imagePath(executive.getImagePath())
                         .build())
                 .collect(Collectors.toList());
     }
 
-    public BaseResponse addExecutives(String name, String role, String department, String studentId, MultipartFile imagePath) {
+    public BaseResponse addExecutives(String name, String year, String role, String department, String studentId, MultipartFile imagePath) {
         // S3에 파일 업로드
         String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
 
         // DB에 저장
         Executives executives = Executives.builder()
                 .name(name)
+                .year(year)
                 .role(role)
                 .department(department)
                 .studentId(studentId)
@@ -60,7 +62,7 @@ public class ExecutivesService {
                 .build();
     }
 
-    public ExecutivesDTO updateExecutives(Long id, String name, String role, String department, String studentId, MultipartFile imagePath) {
+    public ExecutivesDTO updateExecutives(Long id, String name, String year, String role, String department, String studentId, MultipartFile imagePath) {
         // 해당 회장단 가져옴
         Executives executive = executivesRepository.findById(id)
                 .orElseThrow(() -> new ExecutivesNotFoundException("해당 회장단은 존재하지 않습니다."));
@@ -72,6 +74,7 @@ public class ExecutivesService {
         Executives updateExecutive = Executives.builder()
                 .id(executive.getId())
                 .name(name)
+                .year(year)
                 .role(role)
                 .department(department)
                 .studentId(studentId)
@@ -89,6 +92,7 @@ public class ExecutivesService {
         return ExecutivesDTO.builder()
                     .id(executives.getId())
                     .name(executives.getName())
+                    .year(executives.getYear())
                     .role(executives.getRole())
                     .department(executives.getDepartment())
                     .studentId(executives.getStudentId())

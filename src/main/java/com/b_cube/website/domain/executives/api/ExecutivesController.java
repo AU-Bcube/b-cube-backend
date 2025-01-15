@@ -33,6 +33,8 @@ public class ExecutivesController {
     public ResponseEntity<BaseResponse> addExecutives(
             @Parameter(description = "회장단 이름(문자열)")
             @RequestParam("name") String name,
+            @Parameter(description = "연도(문자열)")
+            @RequestParam("year") String year,
             @Parameter(description = "회장단 역할(문자열)")
             @RequestParam("role") String role,
             @Parameter(description = "회장단 학과(문자열)")
@@ -42,7 +44,7 @@ public class ExecutivesController {
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath
     ) {
-        BaseResponse baseResponse = executivesService.addExecutives(name, role, department, studentId, imagePath);
+        BaseResponse baseResponse = executivesService.addExecutives(name, year, role, department, studentId, imagePath);
         return ResponseEntity.ok(baseResponse);
     }
 
@@ -52,6 +54,8 @@ public class ExecutivesController {
             @PathVariable Long id,
             @Parameter(description = "회장단 이름(문자열)")
             @RequestParam("name") String name,
+            @Parameter(description = "연도(문자열)")
+            @RequestParam("year") String year,
             @Parameter(description = "회장단 역할(문자열)")
             @RequestParam("role") String role,
             @Parameter(description = "회장단 학과(문자열)")
@@ -61,7 +65,7 @@ public class ExecutivesController {
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath
     ) {
-        ExecutivesDTO executive = executivesService.updateExecutives(id, name, role, department, studentId, imagePath);
+        ExecutivesDTO executive = executivesService.updateExecutives(id, name, year, role, department, studentId, imagePath);
         return ResponseEntity.ok(executive);
     }
 }
