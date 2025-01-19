@@ -16,7 +16,7 @@ import java.util.List;
 
 @Tag(name = "SexyItController", description = "섹시한 IT 컨트롤러")
 @RestController
-@RequestMapping("/sexyit")
+@RequestMapping("/api/sexyit")
 @RequiredArgsConstructor
 public class SexyItController {
 

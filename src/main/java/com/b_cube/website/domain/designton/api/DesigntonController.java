@@ -15,7 +15,7 @@ import java.util.List;
 
 @Tag(name = "DesigntonController", description = "디자인톤 컨트롤러")
 @RestController
-@RequestMapping("/designton")
+@RequestMapping("/api/designton")
 @RequiredArgsConstructor
 public class DesigntonController {
 

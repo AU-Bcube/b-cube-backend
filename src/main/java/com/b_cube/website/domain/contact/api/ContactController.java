@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "ContactController", description = "연락 컨트롤러")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/contact")
+@RequestMapping("/api/contact")
 public class ContactController {
 
     private final ContactService contactService;

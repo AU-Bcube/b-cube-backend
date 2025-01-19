@@ -15,7 +15,7 @@ import java.util.List;
 
 @Tag(name = "InterviewController", description = "인터뷰 컨트롤러")
 @RestController
-@RequestMapping("/interview")
+@RequestMapping("/api/interview")
 @RequiredArgsConstructor
 public class InterviewController {
 

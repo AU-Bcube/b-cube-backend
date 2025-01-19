@@ -15,7 +15,7 @@ import java.util.List;
 
 @Tag(name = "StudyController", description = "스터디 컨트롤러")
 @RestController
-@RequestMapping("/study")
+@RequestMapping("/api/study")
 @RequiredArgsConstructor
 public class StudyController {
 

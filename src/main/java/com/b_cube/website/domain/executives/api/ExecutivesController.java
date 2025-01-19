@@ -15,7 +15,7 @@ import java.util.List;
 
 @Tag(name = "ExecutivesController", description = "회장단 컨트롤러")
 @RestController
-@RequestMapping("/executives")
+@RequestMapping("/api/executives")
 @RequiredArgsConstructor
 public class ExecutivesController {
 

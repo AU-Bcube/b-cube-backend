@@ -15,7 +15,7 @@ import java.util.List;
 
 @Tag(name = "ActivitiesController", description = "주요활동 컨트롤러")
 @RestController
-@RequestMapping("/activities")
+@RequestMapping("/api/activities")
 @RequiredArgsConstructor
 public class ActivitiesController {
 

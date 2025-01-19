@@ -16,7 +16,7 @@ import java.util.List;
 
 @Tag(name = "PhotoController", description = "활동 사진 컨트롤러")
 @RestController
-@RequestMapping("/photo")
+@RequestMapping("/api/photo")
 @RequiredArgsConstructor
 public class PhotoController {
 

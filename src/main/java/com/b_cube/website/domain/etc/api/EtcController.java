@@ -14,7 +14,7 @@ import java.util.List;
 
 @Tag(name = "EtcController", description = "기타활동 컨트롤러")
 @RestController
-@RequestMapping("/etc")
+@RequestMapping("/api/etc")
 @RequiredArgsConstructor
 public class EtcController {
 
