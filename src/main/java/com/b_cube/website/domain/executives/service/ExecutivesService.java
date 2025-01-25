@@ -35,6 +35,7 @@ public class ExecutivesService {
                         .id(executive.getId())
                         .role(executive.getRole())
                         .department(executive.getDepartment())
+                        .name(executive.getName())
                         .year(executive.getYear())
                         .studentId(executive.getStudentId())
                         .imagePath(executive.getImagePath())
