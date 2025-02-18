@@ -34,6 +34,8 @@ public class EtcController {
             @RequestParam("year") String year,
             @Parameter(description = "활동 제목(문자열)")
             @RequestParam("title") String title,
+            @Parameter(description = "수상 명(문자열)")
+            @RequestParam("award") String award,
             @Parameter(description = "프로젝트 참여자 이름(문자열)")
             @RequestParam("participant") String participant,
             @Parameter(description = "MultipartFile 이미지 삽입")
@@ -42,7 +44,7 @@ public class EtcController {
             @RequestParam("pdfPath")  MultipartFile pdfPath
 
     ) {
-        BaseResponse baseResponse = etcService.addEtc(year, title, participant, imagePath, pdfPath);
+        BaseResponse baseResponse = etcService.addEtc(year, title, award, participant, imagePath, pdfPath);
         return ResponseEntity.ok(baseResponse);
     }
 
@@ -54,6 +56,8 @@ public class EtcController {
             @RequestParam("year") String year,
             @Parameter(description = "활동 제목(문자열)")
             @RequestParam("title") String title,
+            @Parameter(description = "수상 명(문자열)")
+            @RequestParam("award") String award,
             @Parameter(description = "프로젝트 참여자 이름(문자열)")
             @RequestParam("participant") String participant,
             @Parameter(description = "MultipartFile 이미지 삽입")
@@ -61,7 +65,7 @@ public class EtcController {
             @Parameter(description = "MultipartFile pdf 삽입")
             @RequestParam("pdfPath")  MultipartFile pdfPath
     ) {
-        EtcDTO etc = etcService.updateEtc(id, year, title, participant, imagePath, pdfPath);
+        EtcDTO etc = etcService.updateEtc(id, year, title, award, participant, imagePath, pdfPath);
         return ResponseEntity.ok(etc);
     }
 

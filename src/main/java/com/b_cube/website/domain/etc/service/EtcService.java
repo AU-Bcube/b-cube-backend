@@ -36,6 +36,7 @@ public class EtcService {
                         .id(etc.getId())
                         .year(etc.getYear())
                         .title(etc.getTitle())
+                        .award(etc.getAward())
                         .participant(etc.getParticipant())
                         .imagePath(etc.getImagePath())
                         .pdfPath(etc.getPdfPath())
@@ -44,7 +45,7 @@ public class EtcService {
 
     }
 
-    public BaseResponse addEtc(String year, String title, String participant , MultipartFile imagePath, MultipartFile pdfPath) {
+    public BaseResponse addEtc(String year, String title, String award ,String participant , MultipartFile imagePath, MultipartFile pdfPath) {
         // S3에 파일 업로드
         String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
         String pdfUrl = s3Uploader.uploadImage(pdfPath, bucketName);
@@ -53,6 +54,7 @@ public class EtcService {
         Etc etc = Etc.builder()
                 .year(year)
                 .title(title)
+                .award(award)
                 .participant(participant)
                 .imagePath(imageUrl)
                 .pdfPath(pdfUrl)
@@ -64,7 +66,7 @@ public class EtcService {
                 .build();
     }
 
-    public EtcDTO updateEtc(Long id, String year, String title, String participant, MultipartFile imagePath, MultipartFile pdfPath) {
+    public EtcDTO updateEtc(Long id, String year, String title, String award, String participant, MultipartFile imagePath, MultipartFile pdfPath) {
         // 해당 기타활동 가져옴
         Etc etc = etcRepository.findById(id)
                 .orElseThrow(() -> new DesigntonNotFoundException("해당 기타활동은 존재하지 않습니다."));
@@ -78,6 +80,7 @@ public class EtcService {
                 .id(etc.getId())
                 .year(year)
                 .title(title)
+                .award(award)
                 .participant(participant)
                 .imagePath(imageUrl)
                 .pdfPath(pdfUrl)
@@ -95,6 +98,7 @@ public class EtcService {
                 .id(etc.getId())
                 .year(etc.getYear())
                 .title(etc.getTitle())
+                .award(etc.getAward())
                 .participant(etc.getParticipant())
                 .imagePath(etc.getImagePath())
                 .pdfPath(etc.getPdfPath())

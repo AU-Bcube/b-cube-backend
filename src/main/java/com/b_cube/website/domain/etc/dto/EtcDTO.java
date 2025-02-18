@@ -15,6 +15,7 @@ public class EtcDTO {
     private String year;
     private String title;
     private String participant;
+    private String award;
     private String imagePath;
     private String pdfPath;
 

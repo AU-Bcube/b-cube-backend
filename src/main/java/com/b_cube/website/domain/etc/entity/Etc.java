@@ -25,6 +25,9 @@ public class Etc {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "award")
+    private String award;
+
     @Column(name = "participant")
     private String participant;
 
