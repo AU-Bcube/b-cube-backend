@@ -28,6 +28,9 @@ public class EtcService {
     public List<EtcDTO> getEtc() {
         List<Etc> etcs = etcRepository.findAll();
 
+        // 기타활동 최신 버전이 먼저 나오도록 내림차순 정렬
+        etcs.sort((s1,s2) -> s2.getYear().compareTo(s1.getYear()));
+
         return etcs.stream()
                 .map(etc -> EtcDTO.builder()
                         .id(etc.getId())
