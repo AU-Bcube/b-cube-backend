@@ -29,6 +29,9 @@ public class DesigntonService {
     public List<DesigntonDTO> getDesignton() {
         List<Designton> designtons = designtonRepository.findAll();
 
+        // 디자인톤 활동 최신 버전이 먼저 나오도록 내림차순 정렬
+        designtons.sort((s1,s2) -> s2.getYear().compareTo(s1.getYear()));
+
         return designtons.stream()
                 .map(designton -> DesigntonDTO.builder()
                         .id(designton.getId())
