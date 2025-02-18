@@ -28,6 +28,9 @@ public class PhotoService {
     public List<PhotoDTO> getPhoto() {
         List<Photo> photos = photoRepository.findAll();
 
+        // 활동사진 최신 버전이 먼저 나오도록 내림차순 정렬
+        photos.sort((s1,s2) -> s2.getDate().compareTo(s1.getDate()));
+
         return photos.stream()
                 .map(photo -> PhotoDTO.builder()
                         .id(photo.getId())
