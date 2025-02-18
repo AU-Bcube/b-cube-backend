@@ -1,8 +1,5 @@
 package com.b_cube.website.domain.sexyit.service;
 
-import com.b_cube.website.domain.designton.dto.DesigntonDTO;
-import com.b_cube.website.domain.designton.entity.Designton;
-import com.b_cube.website.domain.designton.exception.DesigntonNotFoundException;
 import com.b_cube.website.domain.sexyit.dto.SexyItDTO;
 import com.b_cube.website.domain.sexyit.entity.SexyIt;
 import com.b_cube.website.domain.sexyit.exception.SexyItNotFoundException;
@@ -31,6 +28,9 @@ public class SexyItService {
 
     public List<SexyItDTO> getSexyIt() {
         List<SexyIt> sexyIts = sexyItRepository.findAll();
+
+        // 섹시한 IT 최신 버전이 위로 오게끔 내림차순으로 정렬
+        sexyIts.sort((s1,s2) -> s2.getDate().compareTo(s1.getDate()));
 
         return sexyIts.stream()
                 .map(sexyIt -> SexyItDTO.builder()
