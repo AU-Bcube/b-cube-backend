@@ -29,7 +29,10 @@ public class ImageHandler {
         // 정적 파일 저장
         String fileName = getOriginName(image);
         String fullPathName = uploadImgDir + fileName;
+        System.out.println("asd");
         image.transferTo(new File(fullPathName));
+        System.out.println("22");
+
 
         // Nginx를 통해 접근 가능한 URL 생성
         String fileUrl = accessImgDir + fileName;
