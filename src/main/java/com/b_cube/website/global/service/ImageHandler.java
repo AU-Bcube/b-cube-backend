@@ -10,8 +10,10 @@ import java.io.IOException;
 @Service
 public class ImageHandler {
 
-    @Value("${file.access.dir}")
-    private String accessDir;
+    @Value("${file.access.img.dir}")
+    private String accessImgDir;
+    @Value("${file.access.pdf.dir}")
+    private String accessPdfDir;
 
     /**
      * MultipartFile을 받아서 지정된 경로에 이미지를 저장하는 기능
@@ -26,7 +28,7 @@ public class ImageHandler {
         image.transferTo(new File(fullPathName));
 
         // Nginx를 통해 접근 가능한 URL 생성
-        String fileUrl = accessDir + fileName;
+        String fileUrl = accessImgDir + fileName;
         return fileUrl;
     }
 
@@ -37,7 +39,7 @@ public class ImageHandler {
         pdf.transferTo(new File(fullPathName));
 
         // Nginx를 통해 접근 가능한 URL 생성
-        String fileUrl = accessDir + fileName;
+        String fileUrl = accessPdfDir + fileName;
         return fileUrl;
     }
 
