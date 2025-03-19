@@ -10,10 +10,6 @@ import java.io.IOException;
 @Service
 public class ImageHandler {
 
-    @Value("${file.upload.img.dir}")
-    private String uploadImgDir;
-    @Value("${file.upload.pdf.dir}")
-    private String uploadPdfDir;
     @Value("${file.access.dir}")
     private String accessDir;
 
@@ -26,7 +22,7 @@ public class ImageHandler {
     public String saveImage(MultipartFile image) throws IOException {
         // 정적 파일 저장
         String fileName = getOriginName(image);
-        String fullPathName = uploadImgDir + fileName;
+        String fullPathName = "/home/jinyoung/imgs/" + fileName;
         image.transferTo(new File(fullPathName));
 
         // Nginx를 통해 접근 가능한 URL 생성
@@ -37,7 +33,7 @@ public class ImageHandler {
     public String savePDF(MultipartFile pdf) throws IOException {
         // 정적 파일 저장
         String fileName = getOriginName(pdf);
-        String fullPathName = uploadPdfDir + fileName;
+        String fullPathName = "/home/jinyoung/pdf/" + fileName;
         pdf.transferTo(new File(fullPathName));
 
         // Nginx를 통해 접근 가능한 URL 생성
