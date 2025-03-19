@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Tag(name = "StudyController", description = "스터디 컨트롤러")
@@ -37,8 +38,7 @@ public class StudyController {
             @RequestParam("title") String title,
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath
-
-    ) {
+    ) throws IOException {
         BaseResponse baseResponse = studyService.addStudy(year, title, imagePath);
         return ResponseEntity.ok(baseResponse);
     }
