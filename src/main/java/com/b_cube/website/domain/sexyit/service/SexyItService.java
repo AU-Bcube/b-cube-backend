@@ -1,16 +1,20 @@
 package com.b_cube.website.domain.sexyit.service;
 
+import com.b_cube.website.domain.designton.entity.Designton;
+import com.b_cube.website.domain.designton.exception.DesigntonNotFoundException;
 import com.b_cube.website.domain.sexyit.dto.SexyItDTO;
 import com.b_cube.website.domain.sexyit.entity.SexyIt;
 import com.b_cube.website.domain.sexyit.exception.SexyItNotFoundException;
 import com.b_cube.website.domain.sexyit.repository.SexyItRepository;
 import com.b_cube.website.global.dto.BaseResponse;
+import com.b_cube.website.global.service.ImageHandler;
 import com.b_cube.website.global.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SexyItService {
 
+    private final ImageHandler imageHandler;
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
     private final SexyItRepository sexyItRepository;
@@ -43,16 +48,15 @@ public class SexyItService {
                 .collect(Collectors.toList());
     }
 
-    public BaseResponse addSexyIt(LocalDate date, String title, String url, MultipartFile imagePath) {
-        // S3에 파일 업로드
-        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
+    public BaseResponse addSexyIt(LocalDate date, String title, String url, MultipartFile imagePath) throws IOException {
+        String fileImgUrl = imageHandler.saveImage(imagePath);
 
         // DB에 저장
         SexyIt sexyIt = SexyIt.builder()
                 .date(date)
                 .title(title)
                 .url(url)
-                .imagePath(imageUrl)
+                .imagePath(fileImgUrl)
                 .build();
         sexyItRepository.save(sexyIt);
 
@@ -61,13 +65,13 @@ public class SexyItService {
                 .build();
     }
 
-    public SexyItDTO updateSexyIt(Long id, LocalDate date, String title, String url, MultipartFile imagePath) {
-        // 해당 디자인톤 가져옴
+    public SexyItDTO updateSexyIt(Long id, LocalDate date, String title, String url, MultipartFile imagePath) throws IOException {
+        // 해당 섹시한 IT 가져옴
         SexyIt sexyIt = sexyItRepository.findById(id)
                 .orElseThrow(() -> new SexyItNotFoundException("해당 섹시한 IT는 존재하지 않습니다."));
 
-        // S3에 파일 업로드
-        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
+        imageHandler.deleteImage(sexyIt.getImagePath());
+        String fileImgUrl = imageHandler.saveImage(imagePath);
 
         // 업데이트 할 섹시한 IT 새로 구성
         SexyIt updateSexyIt = SexyIt.builder()
@@ -75,7 +79,7 @@ public class SexyItService {
                 .date(date)
                 .title(title)
                 .url(url)
-                .imagePath(imageUrl)
+                .imagePath(fileImgUrl)
                 .build();
 
         // DB에 저장
@@ -86,7 +90,11 @@ public class SexyItService {
 
     }
 
-    public BaseResponse deleteDesignton(Long id) {
+    public BaseResponse deleteSexyIt(Long id) {
+        SexyIt sexyIt = sexyItRepository.findById(id)
+                .orElseThrow(() -> new SexyItNotFoundException("해당 섹시한 IT는 존재하지 않습니다."));
+        imageHandler.deleteImage(sexyIt.getImagePath());
+
         sexyItRepository.deleteById(id);
         return BaseResponse.builder()
                 .message(SUCCESS_SEXYIT_DELETE)

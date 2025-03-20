@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class SexyItController {
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath
 
-    ) {
+    ) throws IOException {
         BaseResponse baseResponse = sexyItService.addSexyIt(date, title, url, imagePath);
         return ResponseEntity.ok(baseResponse);
     }
@@ -58,7 +59,7 @@ public class SexyItController {
             @RequestParam("url") String url,
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath
-    ) {
+    ) throws IOException {
         SexyItDTO sexyIt = sexyItService.updateSexyIt(id, date, title, url, imagePath);
         return ResponseEntity.ok(sexyIt);
     }
@@ -69,7 +70,7 @@ public class SexyItController {
             @Parameter(description = "섹시한 IT id 값")
             @PathVariable Long id
     ) {
-        BaseResponse baseResponse = sexyItService.deleteDesignton(id);
+        BaseResponse baseResponse = sexyItService.deleteSexyIt(id);
         return ResponseEntity.ok(baseResponse);
     }
 }
