@@ -72,7 +72,7 @@ public class ImageHandler {
         System.out.println(index);
         String fileName = imagePath.substring(index + 5);
         System.out.println(fileName);
-        String fullPathName = uploadImgDir + fileName;
+        String fullPathName = uploadPdfDir + fileName;
         System.out.println(fullPathName);
 
         // 파일 객체 생성
