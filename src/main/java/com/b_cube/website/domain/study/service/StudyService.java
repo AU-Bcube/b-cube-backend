@@ -2,6 +2,7 @@ package com.b_cube.website.domain.study.service;
 
 import com.b_cube.website.domain.study.dto.StudyDTO;
 import com.b_cube.website.domain.study.entity.Study;
+import com.b_cube.website.domain.study.exception.StudyNotFoundException;
 import com.b_cube.website.domain.study.repository.StudyRepository;
 import com.b_cube.website.global.dto.BaseResponse;
 import com.b_cube.website.global.service.ImageHandler;
@@ -52,6 +53,12 @@ public class StudyService {
     }
 
     public BaseResponse deleteStudy(Long id) {
+        Study study = studyRepository.findById(id)
+                .orElseThrow(() -> new StudyNotFoundException("해당 스터디는 존재하지 않습니다."));
+
+        System.out.println(study.getImagePath());
+        imageHandler.deleteImage(study.getImagePath());
+
         studyRepository.deleteById(id);
         return BaseResponse.builder()
                 .message(SUCCESS_STUDY_DELETE)
