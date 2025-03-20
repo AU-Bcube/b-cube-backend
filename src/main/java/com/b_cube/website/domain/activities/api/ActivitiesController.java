@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Tag(name = "ActivitiesController", description = "주요활동 컨트롤러")
@@ -25,7 +26,6 @@ public class ActivitiesController {
     @GetMapping
     public ResponseEntity<List<ActivitiesDTO>> getActivities() {
         List<ActivitiesDTO> activities = activitiesService.getActivities();
-        // 주석주석
         return ResponseEntity.ok(activities);
     }
 
@@ -40,7 +40,7 @@ public class ActivitiesController {
             @RequestParam("imagePath") MultipartFile imagePath,
             @Parameter(description = "MultipartFile pdf 삽입")
             @RequestParam("pdfPath") MultipartFile pdfPath
-    ) {
+    ) throws IOException {
         BaseResponse baseResponse = activitiesService.addActivities(title, description, imagePath, pdfPath);
         return ResponseEntity.ok(baseResponse);
     }

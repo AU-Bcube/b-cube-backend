@@ -3,7 +3,10 @@ package com.b_cube.website.domain.activities.service;
 import com.b_cube.website.domain.activities.dto.ActivitiesDTO;
 import com.b_cube.website.domain.activities.entity.Activities;
 import com.b_cube.website.domain.activities.repository.ActivitiesRepository;
+import com.b_cube.website.domain.designton.entity.Designton;
+import com.b_cube.website.domain.designton.exception.DesigntonNotFoundException;
 import com.b_cube.website.global.dto.BaseResponse;
+import com.b_cube.website.global.service.ImageHandler;
 import com.b_cube.website.global.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ActivitiesService {
 
+    private final ImageHandler imageHandler;
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
     private final ActivitiesRepository activitiesRepository;
@@ -49,17 +53,16 @@ public class ActivitiesService {
             String description,
             MultipartFile imagePath,
             MultipartFile pdfPath
-    ) {
-        // S3에 파일 업로드
-        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
-        String pdfUrl = s3Uploader.uploadImage(pdfPath, bucketName);
+    ) throws IOException {
+        String fileImgUrl = imageHandler.saveImage(imagePath);
+        String filePdfUrl = imageHandler.savePDF(pdfPath);
 
         // DB에 저장
         Activities activities = Activities.builder()
                 .title(title)
                 .description(description)
-                .imagePath(imageUrl)
-                .pdfPath(pdfUrl)
+                .imagePath(fileImgUrl)
+                .pdfPath(filePdfUrl)
                 .build();
         activitiesRepository.save(activities);
 
@@ -69,6 +72,11 @@ public class ActivitiesService {
     }
 
     public BaseResponse deleteActivities(Long id) {
+        Activities activitiy = activitiesRepository.findById(id)
+                .orElseThrow(() -> new DesigntonNotFoundException("해당 주요활동은 존재하지 않습니다."));
+        imageHandler.deleteImage(activitiy.getImagePath());
+        imageHandler.deletePdf(activitiy.getPdfPath());
+
         activitiesRepository.deleteById(id);
         return BaseResponse.builder()
                 .message(SUCCESS_ACTIVITY_DELETE)
