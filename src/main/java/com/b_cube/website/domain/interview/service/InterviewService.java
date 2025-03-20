@@ -1,15 +1,20 @@
 package com.b_cube.website.domain.interview.service;
 
+import com.b_cube.website.domain.designton.entity.Designton;
+import com.b_cube.website.domain.designton.exception.DesigntonNotFoundException;
 import com.b_cube.website.domain.interview.dto.InterviewDTO;
 import com.b_cube.website.domain.interview.entity.Interview;
+import com.b_cube.website.domain.interview.exception.InterviewNotFoundException;
 import com.b_cube.website.domain.interview.repository.InterviewRepository;
 import com.b_cube.website.global.dto.BaseResponse;
+import com.b_cube.website.global.service.ImageHandler;
 import com.b_cube.website.global.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class InterviewService {
 
+    private final ImageHandler imageHandler;
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
     private final InterviewRepository interviewRepository;
@@ -41,16 +47,15 @@ public class InterviewService {
                 .collect(Collectors.toList());
     }
 
-    public BaseResponse addInterview(String name, String studentId, String introduction, MultipartFile imagePath) {
-        // S3에 파일 업로드
-        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
+    public BaseResponse addInterview(String name, String studentId, String introduction, MultipartFile imagePath) throws IOException {
+        String fileImgUrl = imageHandler.saveImage(imagePath);
 
         // DB에 저장
         Interview interview = Interview.builder()
                 .name(name)
                 .studentId(studentId)
                 .introduction(introduction)
-                .imagePath(imageUrl)
+                .imagePath(fileImgUrl)
                 .build();
         interviewRepository.save(interview);
 
@@ -60,6 +65,10 @@ public class InterviewService {
     }
 
     public BaseResponse deleteInterview(Long id) {
+        Interview interview = interviewRepository.findById(id)
+                .orElseThrow(() -> new InterviewNotFoundException("해당 인터뷰는 존재하지 않습니다."));
+        imageHandler.deleteImage(interview.getImagePath());
+
         interviewRepository.deleteById(id);
         return BaseResponse.builder()
                 .message(SUCCESS_INTERVIEW_DELETE)
