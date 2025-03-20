@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Tag(name = "ExecutivesController", description = "회장단 컨트롤러")
@@ -43,7 +44,7 @@ public class ExecutivesController {
             @RequestParam("studentId") String studentId,
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath
-    ) {
+    ) throws IOException {
         BaseResponse baseResponse = executivesService.addExecutives(name, year, role, department, studentId, imagePath);
         return ResponseEntity.ok(baseResponse);
     }
@@ -64,7 +65,7 @@ public class ExecutivesController {
             @RequestParam("studentId") String studentId,
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath
-    ) {
+    ) throws IOException {
         ExecutivesDTO executive = executivesService.updateExecutives(id, name, year, role, department, studentId, imagePath);
         return ResponseEntity.ok(executive);
     }

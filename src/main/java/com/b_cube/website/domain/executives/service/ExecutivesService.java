@@ -5,6 +5,7 @@ import com.b_cube.website.domain.executives.entity.Executives;
 import com.b_cube.website.domain.executives.exception.ExecutivesNotFoundException;
 import com.b_cube.website.domain.executives.repository.ExecutivesRepository;
 import com.b_cube.website.global.dto.BaseResponse;
+import com.b_cube.website.global.service.ImageHandler;
 import com.b_cube.website.global.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ExecutivesService {
 
+    private final ImageHandler imageHandler;
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
     private final ExecutivesRepository executivesRepository;
@@ -43,9 +45,8 @@ public class ExecutivesService {
                 .collect(Collectors.toList());
     }
 
-    public BaseResponse addExecutives(String name, String year, String role, String department, String studentId, MultipartFile imagePath) {
-        // S3에 파일 업로드
-        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
+    public BaseResponse addExecutives(String name, String year, String role, String department, String studentId, MultipartFile imagePath) throws IOException {
+        String fileUrl = imageHandler.saveImage(imagePath);
 
         // DB에 저장
         Executives executives = Executives.builder()
@@ -54,7 +55,7 @@ public class ExecutivesService {
                 .role(role)
                 .department(department)
                 .studentId(studentId)
-                .imagePath(imageUrl)
+                .imagePath(fileUrl)
                 .build();
         executivesRepository.save(executives);
 
@@ -63,13 +64,13 @@ public class ExecutivesService {
                 .build();
     }
 
-    public ExecutivesDTO updateExecutives(Long id, String name, String year, String role, String department, String studentId, MultipartFile imagePath) {
+    public ExecutivesDTO updateExecutives(Long id, String name, String year, String role, String department, String studentId, MultipartFile imagePath) throws IOException {
         // 해당 회장단 가져옴
         Executives executive = executivesRepository.findById(id)
                 .orElseThrow(() -> new ExecutivesNotFoundException("해당 회장단은 존재하지 않습니다."));
 
-        // S3에 파일 업로드
-        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
+        imageHandler.deleteImage(executive.getImagePath());
+        String fileUrl = imageHandler.saveImage(imagePath);
 
         // 업데이트 할 회장단 새로 구성
         Executives updateExecutive = Executives.builder()
@@ -79,7 +80,7 @@ public class ExecutivesService {
                 .role(role)
                 .department(department)
                 .studentId(studentId)
-                .imagePath(imageUrl)
+                .imagePath(fileUrl)
                 .build();
 
         // DB에 저장
