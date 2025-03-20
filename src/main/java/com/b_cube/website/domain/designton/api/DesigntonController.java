@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Tag(name = "DesigntonController", description = "디자인톤 컨트롤러")
@@ -42,7 +43,7 @@ public class DesigntonController {
             @Parameter(description = "MultipartFile pdf 삽입")
             @RequestParam("pdfPath")  MultipartFile pdfPath
 
-    ) {
+    ) throws IOException {
         BaseResponse baseResponse = designtonService.addDesignton(title, year, participant, imagePath, pdfPath);
         return ResponseEntity.ok(baseResponse);
     }
@@ -62,7 +63,7 @@ public class DesigntonController {
             @Parameter(description = "MultipartFile pdf 삽입")
             @RequestParam("pdfPath")  MultipartFile pdfPath
 
-    ) {
+    ) throws IOException {
         DesigntonDTO designton = designtonService.updateDesignton(id, title, year, participant, imagePath, pdfPath);
         return ResponseEntity.ok(designton);
     }

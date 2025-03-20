@@ -4,13 +4,17 @@ import com.b_cube.website.domain.designton.dto.DesigntonDTO;
 import com.b_cube.website.domain.designton.entity.Designton;
 import com.b_cube.website.domain.designton.exception.DesigntonNotFoundException;
 import com.b_cube.website.domain.designton.repository.DesigntonRepository;
+import com.b_cube.website.domain.study.entity.Study;
+import com.b_cube.website.domain.study.exception.StudyNotFoundException;
 import com.b_cube.website.global.dto.BaseResponse;
+import com.b_cube.website.global.service.ImageHandler;
 import com.b_cube.website.global.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DesigntonService {
 
+    private final ImageHandler imageHandler;
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
     private final DesigntonRepository designtonRepository;
@@ -44,18 +49,17 @@ public class DesigntonService {
                 .collect(Collectors.toList());
     }
 
-    public BaseResponse addDesignton(String title, String year, String participant, MultipartFile imagePath, MultipartFile pdfPath) {
-        // S3에 파일 업로드
-        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
-        String pdfUrl = s3Uploader.uploadImage(pdfPath, bucketName);
+    public BaseResponse addDesignton(String title, String year, String participant, MultipartFile imagePath, MultipartFile pdfPath) throws IOException {
+        String fileImgUrl = imageHandler.saveImage(imagePath);
+        String filePdfUrl = imageHandler.savePDF(pdfPath);
 
         // DB에 저장
         Designton designton = Designton.builder()
                 .title(title)
                 .year(year)
                 .participant(participant)
-                .imagePath(imageUrl)
-                .pdfPath(pdfUrl)
+                .imagePath(fileImgUrl)
+                .pdfPath(filePdfUrl)
                 .build();
         designtonRepository.save(designton);
 
@@ -64,14 +68,15 @@ public class DesigntonService {
                 .build();
     }
 
-    public DesigntonDTO updateDesignton(Long id, String title, String year, String participant, MultipartFile imagePath, MultipartFile pdfPath) {
+    public DesigntonDTO updateDesignton(Long id, String title, String year, String participant, MultipartFile imagePath, MultipartFile pdfPath) throws IOException {
         // 해당 디자인톤 가져옴
         Designton designton = designtonRepository.findById(id)
                 .orElseThrow(() -> new DesigntonNotFoundException("해당 디자인톤은 존재하지 않습니다."));
 
-        // S3에 파일 업로드
-        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
-        String pdfUrl = s3Uploader.uploadImage(pdfPath, bucketName);
+        imageHandler.deleteImage(designton.getImagePath());
+        imageHandler.deletePdf(designton.getPdfPath());
+        String fileImgUrl = imageHandler.saveImage(imagePath);
+        String filePdfUrl = imageHandler.savePDF(pdfPath);
 
         // 업데이트 할 디자인톤 새로 구성
         Designton updateDesignton = Designton.builder()
@@ -79,8 +84,8 @@ public class DesigntonService {
                 .title(title)
                 .year(year)
                 .participant(participant)
-                .imagePath(imageUrl)
-                .pdfPath(pdfUrl)
+                .imagePath(fileImgUrl)
+                .pdfPath(filePdfUrl)
                 .build();
 
         // DB에 저장
@@ -91,6 +96,11 @@ public class DesigntonService {
     }
 
     public BaseResponse deleteDesignton(Long id) {
+        Designton designton = designtonRepository.findById(id)
+                .orElseThrow(() -> new DesigntonNotFoundException("해당 디자인톤은 존재하지 않습니다."));
+        imageHandler.deleteImage(designton.getImagePath());
+        imageHandler.deletePdf(designton.getPdfPath());
+
         designtonRepository.deleteById(id);
         return BaseResponse.builder()
                 .message(SUCCESS_DESIGNTON_DELETE)
