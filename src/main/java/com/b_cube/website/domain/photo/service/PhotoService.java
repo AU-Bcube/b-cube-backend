@@ -1,15 +1,19 @@
 package com.b_cube.website.domain.photo.service;
 
+import com.b_cube.website.domain.designton.entity.Designton;
+import com.b_cube.website.domain.designton.exception.DesigntonNotFoundException;
 import com.b_cube.website.domain.photo.dto.PhotoDTO;
 import com.b_cube.website.domain.photo.entity.Photo;
 import com.b_cube.website.domain.photo.repository.PhotoRepository;
 import com.b_cube.website.global.dto.BaseResponse;
+import com.b_cube.website.global.service.ImageHandler;
 import com.b_cube.website.global.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PhotoService {
 
+    private final ImageHandler imageHandler;
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
     private final PhotoRepository photoRepository;
@@ -42,16 +47,15 @@ public class PhotoService {
     }
 
 
-    public BaseResponse addPhoto(String description, LocalDate date, MultipartFile imagePath) {
-        // S3에 파일 업로드
-        String imageUrl = s3Uploader.uploadImage(imagePath, bucketName);
+    public BaseResponse addPhoto(String description, LocalDate date, MultipartFile imagePath) throws IOException {
+        String fileImgUrl = imageHandler.saveImage(imagePath);
 
         if (date == null) {
             // DB에 저장
             Photo photo = Photo.builder()
                     .description(description)
                     .date(LocalDate.now())
-                    .imagePath(imageUrl)
+                    .imagePath(fileImgUrl)
                     .build();
             photoRepository.save(photo);
         } else {
@@ -59,7 +63,7 @@ public class PhotoService {
             Photo photo = Photo.builder()
                     .description(description)
                     .date(date)
-                    .imagePath(imageUrl)
+                    .imagePath(fileImgUrl)
                     .build();
             photoRepository.save(photo);
         }
@@ -71,6 +75,9 @@ public class PhotoService {
 
 
     public BaseResponse deletePhoto(Long id) {
+        Photo photo = photoRepository.findById(id)
+                .orElseThrow(() -> new DesigntonNotFoundException("해당 사진은 존재하지 않습니다."));
+        imageHandler.deleteImage(photo.getImagePath());
 
         photoRepository.deleteById(id);
         return BaseResponse.builder()

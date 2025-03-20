@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class PhotoController {
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath
 
-    ) {
+    ) throws IOException {
         BaseResponse baseResponse = photoService.addPhoto(description, date, imagePath);
         return ResponseEntity.ok(baseResponse);
     }
