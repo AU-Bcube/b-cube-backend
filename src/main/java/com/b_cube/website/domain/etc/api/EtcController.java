@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 
 @Tag(name = "EtcController", description = "기타활동 컨트롤러")
@@ -43,7 +45,7 @@ public class EtcController {
             @Parameter(description = "MultipartFile pdf 삽입")
             @RequestParam("pdfPath")  MultipartFile pdfPath
 
-    ) {
+    ) throws IOException {
         BaseResponse baseResponse = etcService.addEtc(year, title, award, participant, imagePath, pdfPath);
         return ResponseEntity.ok(baseResponse);
     }
@@ -64,7 +66,7 @@ public class EtcController {
             @RequestParam("imagePath") MultipartFile imagePath,
             @Parameter(description = "MultipartFile pdf 삽입")
             @RequestParam("pdfPath")  MultipartFile pdfPath
-    ) {
+    ) throws IOException {
         EtcDTO etc = etcService.updateEtc(id, year, title, award, participant, imagePath, pdfPath);
         return ResponseEntity.ok(etc);
     }
