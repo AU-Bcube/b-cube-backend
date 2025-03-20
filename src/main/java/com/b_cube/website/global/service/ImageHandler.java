@@ -1,5 +1,6 @@
 package com.b_cube.website.global.service;
 
+import com.b_cube.website.global.exception.FileNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +30,6 @@ public class ImageHandler {
         // 정적 파일 저장
         String fileName = getOriginName(image);
         String fullPathName = uploadImgDir + fileName;
-        System.out.println(fullPathName);
         image.transferTo(new File(fullPathName));
 
         // Nginx를 통해 접근 가능한 URL 생성
@@ -46,6 +46,44 @@ public class ImageHandler {
         // Nginx를 통해 접근 가능한 URL 생성
         String fileUrl = accessPdfDir + fileName;
         return fileUrl;
+    }
+
+    public void deleteImage(String imagePath) {
+        int index = imagePath.indexOf("/imgs/");
+        System.out.println(index);
+        String fileName = imagePath.substring(index + 6);
+        System.out.println(fileName);
+        String fullPathName = uploadImgDir + fileName;
+        System.out.println(fullPathName);
+
+        // 파일 객체 생성
+        File file = new File(fullPathName);
+
+        // 파일이 존재하면 삭제, 없으면 예외 던짐
+        if(file.exists()) {
+            file.delete();
+        } else {
+            throw new FileNotFoundException("해당 파일을 찾을 수 없습니다.");
+        }
+    }
+
+    public void deletePdf(String imagePath) {
+        int index = imagePath.indexOf("/pdf/");
+        System.out.println(index);
+        String fileName = imagePath.substring(index + 5);
+        System.out.println(fileName);
+        String fullPathName = uploadImgDir + fileName;
+        System.out.println(fullPathName);
+
+        // 파일 객체 생성
+        File file = new File(fullPathName);
+
+        // 파일이 존재하면 삭제, 없으면 예외 던짐
+        if(file.exists()) {
+            file.delete();
+        } else {
+            throw new FileNotFoundException("해당 파일을 찾을 수 없습니다.");
+        }
     }
 
     private String getOriginName(MultipartFile image) {
