@@ -43,7 +43,7 @@ public class ExecutivesService {
                 .collect(Collectors.toList());
     }
 
-    public BaseResponse addExecutives(String name, String role, String studentId, MultipartFile imagePath) throws IOException {
+    public BaseResponse addExecutives(String name, String role, int studentId, MultipartFile imagePath) throws IOException {
         String fileUrl = imageHandler.saveImage(imagePath);
 
         // DB에 저장
@@ -60,7 +60,7 @@ public class ExecutivesService {
                 .build();
     }
 
-    public ExecutivesDTO updateExecutives(Long id, String name, String role, String studentId, MultipartFile imagePath) throws IOException {
+    public ExecutivesDTO updateExecutives(Long id, String name, String role, int studentId, MultipartFile imagePath) throws IOException {
         // 해당 회장단 가져옴
         Executives executive = executivesRepository.findById(id)
                 .orElseThrow(() -> new ExecutivesNotFoundException("해당 회장단은 존재하지 않습니다."));

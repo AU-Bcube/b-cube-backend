@@ -34,8 +34,8 @@ public class InterviewController {
     public ResponseEntity<BaseResponse> addInterview(
             @Parameter(description = "인터뷰 성함(문자열)")
             @RequestParam("name") String name,
-            @Parameter(description = "인터뷰 학번(문자열)")
-            @RequestParam("studentId") String studentId,
+            @Parameter(description = "인터뷰 학번(숫자)")
+            @RequestParam("studentId") int studentId,
             @Parameter(description = "인터뷰 소개 글(문자열)")
             @RequestParam("introduction") String introduction,
             @Parameter(description = "MultipartFile 이미지 삽입")

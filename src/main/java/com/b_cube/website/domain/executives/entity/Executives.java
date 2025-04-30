@@ -26,7 +26,7 @@ public class Executives {
     private String role;
 
     @Column(name = "student_id")
-    private String studentId;
+    private int studentId;
 
     @Column(name = "image_path")
     private String imagePath;

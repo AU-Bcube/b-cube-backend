@@ -23,7 +23,7 @@ public class Interview {
     private String name;
 
     @Column(name = "student_id")
-    private String studentId;
+    private int studentId;
 
     @Column(name = "introduction")
     private String introduction;

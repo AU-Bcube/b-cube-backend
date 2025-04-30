@@ -13,7 +13,7 @@ public class ExecutivesDTO {
 
     private Long id;
     private String role;
-    private String studentId;
+    private int studentId;
     private String name;
     private String imagePath;
 

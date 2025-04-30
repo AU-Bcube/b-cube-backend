@@ -36,8 +36,8 @@ public class ExecutivesController {
             @RequestParam("name") String name,
             @Parameter(description = "회장단 역할(문자열)")
             @RequestParam("role") String role,
-            @Parameter(description = "회장단 학번(문자열)")
-            @RequestParam("studentId") String studentId,
+            @Parameter(description = "회장단 학번(숫자)")
+            @RequestParam("studentId") int studentId,
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath
     ) throws IOException {
@@ -53,8 +53,8 @@ public class ExecutivesController {
             @RequestParam("name") String name,
             @Parameter(description = "회장단 역할(문자열)")
             @RequestParam("role") String role,
-            @Parameter(description = "회장단 학번(문자열)")
-            @RequestParam("studentId") String studentId,
+            @Parameter(description = "회장단 학번(숫자)")
+            @RequestParam("studentId") int studentId,
             @Parameter(description = "MultipartFile 이미지 삽입")
             @RequestParam("imagePath") MultipartFile imagePath
     ) throws IOException {

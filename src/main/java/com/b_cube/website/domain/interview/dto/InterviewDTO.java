@@ -13,7 +13,7 @@ public class InterviewDTO {
 
     private Long id;
     private String name;
-    private String studentId;
+    private int studentId;
     private String introduction;
     private String imagePath;
 

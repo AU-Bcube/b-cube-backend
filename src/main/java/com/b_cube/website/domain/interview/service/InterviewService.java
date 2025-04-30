@@ -34,7 +34,7 @@ public class InterviewService {
         List<Interview> interviews = interviewRepository.findAll();
 
         // OB 선배의 학번이 최신 학번이 위로 오도록 내림차순 정렬
-        interviews.sort((s1,s2) -> s2.getStudentId().compareTo(s1.getStudentId()));
+        interviews.sort((s1,s2) -> s2.getStudentId() - s1.getStudentId());
 
         return interviews.stream()
                 .map(interview -> InterviewDTO.builder()
@@ -47,7 +47,7 @@ public class InterviewService {
                 .collect(Collectors.toList());
     }
 
-    public BaseResponse addInterview(String name, String studentId, String introduction, MultipartFile imagePath) throws IOException {
+    public BaseResponse addInterview(String name, int studentId, String introduction, MultipartFile imagePath) throws IOException {
         String fileImgUrl = imageHandler.saveImage(imagePath);
 
         // DB에 저장
