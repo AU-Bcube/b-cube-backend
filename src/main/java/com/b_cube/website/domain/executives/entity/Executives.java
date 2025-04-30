@@ -25,12 +25,6 @@ public class Executives {
     @Column(name = "role")
     private String role;
 
-    @Column(name = "year")
-    private String year;
-
-    @Column(name = "department")
-    private String department;
-
     @Column(name = "student_id")
     private String studentId;
 
