@@ -63,7 +63,7 @@ public class ActivitiesService {
                 .description(description)
                 .imagePath(fileImgUrl)
                 .pdfPath(filePdfUrl)
-                .build();
+                .build();   
         activitiesRepository.save(activities);
 
         return BaseResponse.builder()
