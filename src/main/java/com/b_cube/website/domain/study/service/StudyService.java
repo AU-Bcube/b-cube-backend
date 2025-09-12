@@ -26,6 +26,8 @@ public class StudyService {
     public List<StudyDTO> getStudy() {
         List<Study> studies = studyRepository.findAll();
 
+        studies.sort((s1,s2) -> s2.getYear().compareTo(s1.getYear()));
+
         return studies.stream()
                 .map(study -> StudyDTO.builder()
                         .id(study.getId())
