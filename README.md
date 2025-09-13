@@ -101,7 +101,7 @@
 - B-cube 웹사이트의 '리쿠르팅' 탭 페이지입니다.
 - B-cube 모집 기간과 활동 분야, Contact us를 확인할 수 있습니다. 
 <p align="center">
-  <img src="Readme_assets/리쿠르팅 탭.gif" alt="리쿠르팅 탭" width="420px" />
+  <img src="Readme_assets/리쿠르팅 탭.gif" alt="리쿠르팅 탭" width="90%" />
 </p>
 
 ----
@@ -112,8 +112,8 @@
 <p>
   <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=Next.js&logoColor=white">
   <img src="https://img.shields.io/badge/Typescript-3178C6?style=flat-square&logo=Typescript&logoColor=white">
-  <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=flat-square&logo=Tailwind css&logoColor=white">
-  <img src="https://img.shields.io/badge/Github Actions-2088FF?style=flat-square&logo=Github Actions&logoColor=white">
+  <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=flat-square&logo=Tailwindcss&logoColor=white">
+  <img src="https://img.shields.io/badge/Github Actions-2088FF?style=flat-square&logo=GithubActions&logoColor=white">
 </p>
 
 ### BE
